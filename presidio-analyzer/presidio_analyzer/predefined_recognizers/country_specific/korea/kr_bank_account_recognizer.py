@@ -11,11 +11,12 @@ class KrBankAccountRecognizer(PatternRecognizer):
     bank-specific segment layouts, commonly written with hyphens
     (e.g. NongHyup's 302-XXXX-XXXX-XX personal accounts, KB Kookmin and
     Korea Post's XXXXXX-XX-XXXXXX, or common three-segment forms such as
-    110-234-567890). No unified national
-    format or check digit exists, so precision comes from structural
-    patterns plus negative lookaheads that exclude look-alike shapes:
-    Korean mobile/VoIP phone numbers (010/011/016/017/019/070),
-    resident registration numbers and calendar dates.
+    110-234-567890). No unified national format or check digit exists, so
+    precision comes from structural patterns plus negative lookaheads that
+    exclude look-alike shapes: Korean mobile/VoIP phone numbers
+    (010/011/016/017/019/070), resident registration numbers and calendar
+    dates. A match must span the whole hyphenated number, so a segment run
+    inside a longer number (e.g. a card number) is not reported.
 
     Reference: per-bank layouts (e.g. NongHyup's 3YY-XXXX-XXXX-CC
     personal accounts) are documented at
@@ -33,27 +34,27 @@ class KrBankAccountRecognizer(PatternRecognizer):
     PATTERNS = [
         Pattern(
             "NH 4-segment account (Medium)",
-            r"(?<!\d)302-\d{3,4}-\d{3,4}-\d{2}(?!\d)",
+            r"(?<!\d)(?<!\d-)302-\d{3,4}-\d{3,4}-\d{2}(?!-?\d)",
             0.6,
         ),
         Pattern(
             "Hyphenated 3-segment account (Weak)",
-            r"(?<!\d)(?!(?:01[01679]|070)-\d{3,4}-\d{4}(?!\d))"
+            r"(?<!\d)(?<!\d-)(?!(?:01[01679]|070)-\d{3,4}-\d{4}(?!\d))"
             r"(?!\d{4}[-./]\d{1,2}[-./]\d{1,2}(?!\d))(?=(?:\d-?){9,16}(?!\d))"
-            r"\d{2,3}-\d{2,6}-\d{1,7}(?!\d)",
+            r"\d{2,3}-\d{2,6}-\d{1,7}(?!-?\d)",
             0.3,
         ),
         Pattern(
             "KB Kookmin / Korea Post 6-2-6 account (Weak)",
-            r"(?<!\d)\d{6}-\d{2}-\d{6}(?!\d)",
+            r"(?<!\d)(?<!\d-)\d{6}-\d{2}-\d{6}(?!-?\d)",
             0.3,
         ),
         Pattern(
             "Mixed-separator account (Very weak)",
-            r"(?<!\d)(?!\d{6}-?\d{7}(?!\d))"
+            r"(?<!\d)(?<!\d-)(?!\d{6}-?\d{7}(?!\d))"
             r"(?!(?:01[01679]|070)[- ]?\d{3,4}[- ]?\d{4}(?!\d))"
             r"(?!\d{4}[-./]\d{1,2}[-./]\d{1,2}(?!\d))(?=(?:\d[- ]?){9,16}(?!\d))"
-            r"\d{2,4}(?:[- ]?\d{2,6})(?:[- ]?\d{1,7})(?:[- ]?\d{1,3})?(?!\d)",
+            r"\d{2,4}(?:[- ]?\d{2,6})(?:[- ]?\d{1,7})(?:[- ]?\d{1,3})?(?!-?\d)",
             0.15,
         ),
     ]

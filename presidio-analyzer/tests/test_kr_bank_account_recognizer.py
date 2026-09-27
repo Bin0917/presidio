@@ -66,6 +66,8 @@ def test_when_account_like_then_best_match_found(
         "9876543210123",
         # Dates must not match
         "2024-03-10",
+        # Part of a longer hyphenated number, e.g. a card number
+        "1234-5678-9012-3456",
         # Too short
         "45000",
         "12345678",
@@ -73,6 +75,23 @@ def test_when_account_like_then_best_match_found(
 )
 def test_when_look_alike_then_no_match(text, recognizer, entities):
     assert recognizer.analyze(text, entities) == []
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        # IBK 3-6-2-3 and NongHyup 351-prefixed 3-4-4-2 accounts
+        "123-456789-01-234",
+        "351-1234-5678-91",
+        # KB Kookmin / Korea Post 6-2-6 account
+        "123456-78-901234",
+    ],
+)
+def test_when_account_has_more_segments_then_only_whole_number_matches(
+    text, recognizer, entities
+):
+    results = recognizer.analyze(text, entities)
+    assert {(r.start, r.end) for r in results} == {(0, len(text))}
 
 
 NOOP_KO = {"lang_code": "ko", "model_name": "no_op"}
