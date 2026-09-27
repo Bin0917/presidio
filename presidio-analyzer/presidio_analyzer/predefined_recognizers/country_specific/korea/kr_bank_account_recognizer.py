@@ -9,8 +9,9 @@ class KrBankAccountRecognizer(PatternRecognizer):
 
     Korean bank account numbers are 10-14 digit identifiers issued in
     bank-specific segment layouts, commonly written with hyphens
-    (e.g. NongHyup's 302-XXXX-XXXX-XX personal accounts, or common
-    three-segment forms such as 110-234-567890). No unified national
+    (e.g. NongHyup's 302-XXXX-XXXX-XX personal accounts, KB Kookmin and
+    Korea Post's XXXXXX-XX-XXXXXX, or common three-segment forms such as
+    110-234-567890). No unified national
     format or check digit exists, so precision comes from structural
     patterns plus negative lookaheads that exclude look-alike shapes:
     Korean mobile/VoIP phone numbers (010/011/016/017/019/070),
@@ -40,6 +41,11 @@ class KrBankAccountRecognizer(PatternRecognizer):
             r"(?<!\d)(?!(?:01[01679]|070)-\d{3,4}-\d{4}(?!\d))"
             r"(?!\d{4}[-./]\d{1,2}[-./]\d{1,2}(?!\d))(?=(?:\d-?){9,16}(?!\d))"
             r"\d{2,3}-\d{2,6}-\d{1,7}(?!\d)",
+            0.3,
+        ),
+        Pattern(
+            "KB Kookmin / Korea Post 6-2-6 account (Weak)",
+            r"(?<!\d)\d{6}-\d{2}-\d{6}(?!\d)",
             0.3,
         ),
         Pattern(

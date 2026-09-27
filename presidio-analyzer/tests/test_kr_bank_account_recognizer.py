@@ -35,6 +35,8 @@ def entities():
         # Common hyphenated 3-segment layouts
         ("110-234-567890", 0, 14, 0.3),
         ("457-910-012345", 0, 14, 0.3),
+        # KB Kookmin / Korea Post 6-2-6 layout
+        ("123456-78-901234", 0, 16, 0.3),
         # Mixed/plain digit runs (9-16 digits, excluding the 13-digit RRN shape)
         ("987654321012", 0, 12, 0.15),
         ("1002-123-456789", 0, 15, 0.15),
