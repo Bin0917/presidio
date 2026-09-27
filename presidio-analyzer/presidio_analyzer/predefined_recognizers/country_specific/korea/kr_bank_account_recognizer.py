@@ -15,9 +15,10 @@ class KrBankAccountRecognizer(PatternRecognizer):
     precision comes from structural patterns plus negative lookaheads that
     exclude look-alike shapes: Korean phone numbers (mobile 010/011/016-019,
     Seoul 02 and regional area codes, 070 VoIP, 050X safe numbers, 080
-    toll-free), resident registration numbers and calendar dates. A match
-    must span the whole hyphenated number, so a segment run inside a longer
-    number (e.g. a card number) is not reported.
+    toll-free), resident and business registration numbers (the latter
+    written XXX-XX-XXXXX) and calendar dates. A match must span the whole
+    hyphenated number, so a segment run inside a longer number (e.g. a card
+    number) is not reported.
 
     Reference: per-bank layouts (e.g. NongHyup's 3YY-XXXX-XXXX-CC
     personal accounts) are documented at
@@ -42,6 +43,7 @@ class KrBankAccountRecognizer(PatternRecognizer):
             "Hyphenated 3-segment account (Weak)",
             r"(?<!\d)(?<!\d-)"
             r"(?!0(?:1[016789]|2|[3-6][1-5]|70|50\d|80)-\d{3,4}-\d{4}(?!\d))"
+            r"(?!\d{3}-\d{2}-\d{5}(?!\d))"
             r"(?!\d{4}[-./]\d{1,2}[-./]\d{1,2}(?!\d))(?=(?:\d-?){9,16}(?!\d))"
             r"\d{2,3}-\d{2,6}-\d{1,7}(?!-?\d)",
             0.3,
@@ -55,6 +57,7 @@ class KrBankAccountRecognizer(PatternRecognizer):
             "Mixed-separator account (Very weak)",
             r"(?<!\d)(?<!\d-)(?!\d{6}-?\d{7}(?!\d))"
             r"(?!0(?:1[016789]|2|[3-6][1-5]|70|50\d|80)[- ]?\d{3,4}[- ]?\d{4}(?!\d))"
+            r"(?!\d{3}-\d{2}-\d{5}(?!\d))"
             r"(?!\d{4}[-./]\d{1,2}[-./]\d{1,2}(?!\d))(?=(?:\d[- ]?){9,16}(?!\d))"
             r"\d{2,4}(?:[- ]?\d{2,6})(?:[- ]?\d{1,7})(?:[- ]?\d{1,3})?(?!-?\d)",
             0.15,

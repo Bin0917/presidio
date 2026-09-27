@@ -71,6 +71,8 @@ def test_when_account_like_then_best_match_found(
         "9601211234567",
         # Any 13-digit pure run is left to KR_RRN's domain
         "9876543210123",
+        # Business registration number shape is left to KR_BRN
+        "123-45-67890",
         # Dates must not match
         "2024-03-10",
         # Part of a longer hyphenated number, e.g. a card number
