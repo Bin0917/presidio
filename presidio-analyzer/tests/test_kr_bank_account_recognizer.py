@@ -59,6 +59,13 @@ def test_when_account_like_then_best_match_found(
         "070-1234-5678",
         "01012345678",
         "07012345678",
+        "018-123-4567",
+        # Landline, safe-number (050X) and toll-free phone numbers
+        "02-1234-5678",
+        "031-123-4567",
+        "0212345678",
+        "0504-1234-5678",
+        "080-123-4567",
         # Resident registration number shapes must not match
         "960121-1234567",
         "9601211234567",
